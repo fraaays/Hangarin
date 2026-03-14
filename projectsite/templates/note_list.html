@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Notes</h2>
+
+<a href="{% url 'note_create' %}" class="btn btn-primary">Add Note</a>
+
+<table class="table mt-3">
+
+<tr>
+<th>Task</th>
+<th>Content</th>
+<th>Created</th>
+<th>Actions</th>
+</tr>
+
+{% for note in notes %}
+
+<tr>
+
+<td>{{ note.task }}</td>
+<td>{{ note.content }}</td>
+<td>{{ note.created_at }}</td>
+
+<td>
+
+<a href="{% url 'note_update' note.id %}" class="btn btn-warning btn-sm">Edit</a>
+
+<a href="{% url 'note_delete' note.id %}" class="btn btn-danger btn-sm">Delete</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

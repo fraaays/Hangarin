@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Priorities</h2>
+
+<a href="{% url 'priority_create' %}" class="btn btn-primary">Add Priority</a>
+
+<table class="table mt-3">
+
+<tr>
+<th>Name</th>
+<th>Actions</th>
+</tr>
+
+{% for priority in priorities %}
+
+<tr>
+
+<td>{{ priority.name }}</td>
+
+<td>
+
+<a href="{% url 'priority_update' priority.id %}" class="btn btn-warning btn-sm">Edit</a>
+
+<a href="{% url 'priority_delete' priority.id %}" class="btn btn-danger btn-sm">Delete</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
