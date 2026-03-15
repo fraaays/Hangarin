@@ -22,6 +22,7 @@ def dashboard(request):
     high_priority = Task.objects.filter(priority__name="High").count()
     medium_priority = Task.objects.filter(priority__name="Medium").count()
     low_priority = Task.objects.filter(priority__name="Low").count()
+    critical_priority = Task.objects.filter(priority__name="Critical").count()
 
     # completion progress
     progress = 0
@@ -36,6 +37,7 @@ def dashboard(request):
         "recent_tasks": recent_tasks,
         "upcoming_tasks": upcoming_tasks,
         "progress": progress,
+        "critical_priority": critical_priority,
         "high_priority": high_priority,
         "medium_priority": medium_priority,
         "low_priority": low_priority,
@@ -47,7 +49,16 @@ def category_list(request):
 
     categories = Category.objects.all()
 
-    return render(request, "category_list.html", {"categories": categories})
+    search = request.GET.get('search')
+
+    if search:
+        categories = categories.filter(name__icontains=search)
+
+    context = {
+        'categories': categories
+    }
+
+    return render(request, 'category_list.html', context)
 
 
 def category_create(request):
@@ -94,8 +105,16 @@ def priority_list(request):
 
     priorities = Priority.objects.all()
 
-    return render(request, "priority_list.html", {"priorities": priorities})
+    search = request.GET.get("search")
 
+    if search:
+        priorities = priorities.filter(name__icontains=search)
+
+    context = {
+        "priorities": priorities
+    }
+
+    return render(request, "priority_list.html", context)
 
 def priority_create(request):
 
@@ -180,6 +199,10 @@ def task_list(request):
 
     return render(request, "task_list.html", context)
 
+def task_view(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    return render(request, "task_view.html", {"task": task})
+
 def task_create(request):
 
     if request.method == "POST":
@@ -222,9 +245,39 @@ def task_delete(request, id):
 
 def subtask_list(request):
 
-    subtasks = SubTask.objects.select_related("parent_task")
+    subtasks = SubTask.objects.all()
 
-    return render(request, "subtask_list.html", {"subtasks": subtasks})
+    search = request.GET.get('search')
+    status = request.GET.get('status')
+    sort = request.GET.get('sort')
+
+    # Search
+    if search:
+        subtasks = subtasks.filter(title__icontains=search)
+
+    # Status filter
+    if status:
+        subtasks = subtasks.filter(status=status)
+
+    # Sorting
+    if sort:
+        subtasks = subtasks.order_by(sort)
+
+    context = {
+        'subtasks': subtasks
+    }
+
+    return render(request, 'subtask_list.html', context)
+
+def subtask_view(request, id):
+
+    subtask = get_object_or_404(SubTask, id=id)
+
+    context = {
+        "subtask": subtask
+    }
+
+    return render(request, "subtask_view.html", context)
 
 
 def subtask_create(request):
@@ -269,10 +322,29 @@ def subtask_delete(request, id):
 
 def note_list(request):
 
-    notes = Note.objects.select_related("task")
+    notes = Note.objects.all().select_related("task")
 
-    return render(request, "note_list.html", {"notes": notes})
+    search = request.GET.get("search")
+    created = request.GET.get("created_at")
 
+    if search:
+        notes = notes.filter(content__icontains=search)
+
+    if created:
+        notes = notes.filter(created_at__date=created)
+
+    context = {
+        "notes": notes
+    }
+
+    return render(request, "note_list.html", context)
+
+def note_view(request, id):
+    note = get_object_or_404(Note, id=id)
+
+    return render(request, "note_view.html", {
+        "note": note
+    })
 
 def note_create(request):
 

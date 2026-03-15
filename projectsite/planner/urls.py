@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from .views import *
 
 urlpatterns = [
@@ -16,16 +17,19 @@ urlpatterns = [
     path('priorities/delete/<int:id>/', priority_delete, name='priority_delete'),
 
     path('tasks/', task_list, name='task_list'),
+    path('task/<int:pk>/', views.task_view, name='task_view'),
     path('tasks/create/', task_create, name='task_create'),
     path('tasks/update/<int:id>/', task_update, name='task_update'),
     path('tasks/delete/<int:id>/', task_delete, name='task_delete'),
 
     path('subtasks/', subtask_list, name='subtask_list'),
+    path('subtasks/view/<int:id>/', subtask_view, name='subtask_view'),
     path('subtasks/create/', subtask_create, name='subtask_create'),
     path('subtasks/update/<int:id>/', subtask_update, name='subtask_update'),
     path('subtasks/delete/<int:id>/', subtask_delete, name='subtask_delete'),
 
     path('notes/', note_list, name='note_list'),
+    path('notes/view/<int:id>/', note_view, name='note_view'),
     path('notes/create/', note_create, name='note_create'),
     path('notes/update/<int:id>/', note_update, name='note_update'),
     path('notes/delete/<int:id>/', note_delete, name='note_delete'),

@@ -1,39 +1,135 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<h2>Notes</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
 
-<a href="{% url 'note_create' %}" class="btn btn-primary">Add Note</a>
+<div>
+<h2 class="fw-semibold mb-0">Notes Manager</h2>
+<p class="text-muted mb-0">Manage notes and important information.</p>
+</div>
 
-<table class="table mt-3">
+<div class="d-flex gap-2">
+
+<a href="{% url 'note_create' %}" class="btn btn-success shadow-sm">
+<i class="bi bi-plus-lg"></i> New Note
+</a>
+
+<a href="{% url 'note_list' %}" class="btn btn-outline-secondary">
+<i class="bi bi-arrow-clockwise"></i> Clear
+</a>
+
+</div>
+
+</div>
+
+
+<!-- SEARCH / FILTER -->
+
+<div class="card shadow-sm p-3 mb-4">
+
+<form method="GET"
+class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+
+<input type="text"
+name="search"
+class="form-control"
+style="max-width:500px;"
+placeholder="Search content..."
+value="{{ request.GET.search }}">
+
+
+<input type="date"
+name="created_at"
+class="form-control"
+style="max-width:400px;"
+value="{{ request.GET.created_at }}">
+
+
+<button class="btn btn-primary px-4">
+Apply
+</button>
+
+</form>
+
+</div>
+
+
+
+<!-- TABLE -->
+
+<table class="table align-middle">
+
+<thead class="table-dark">
 
 <tr>
-<th>Task</th>
-<th>Content</th>
-<th>Created</th>
-<th>Actions</th>
+
+<th style="width:25%">Task</th>
+<th style="width:45%">Content</th>
+<th class="text-center" style="width:20%">Created</th>
+<th class="text-center" style="width:10%">Actions</th>
+
 </tr>
+
+</thead>
+
+<tbody>
 
 {% for note in notes %}
 
 <tr>
 
-<td>{{ note.task }}</td>
-<td>{{ note.content }}</td>
-<td>{{ note.created_at }}</td>
+<td class="fw-semibold">
+{{ note.task.title }}
+</td>
+
 
 <td>
+{{ note.content }}
+</td>
 
-<a href="{% url 'note_update' note.id %}" class="btn btn-warning btn-sm">Edit</a>
 
-<a href="{% url 'note_delete' note.id %}" class="btn btn-danger btn-sm">Delete</a>
+<td class="text-center">
+{{ note.created_at|date:"M d, Y" }}
+</td>
+
+<td class="text-center">
+
+<div class="d-flex justify-content-center gap-3">
+
+<a href="{% url 'note_view' note.id %}" class="text-primary">
+<i class="bi bi-eye"></i>
+</a>
+
+<a href="{% url 'note_update' note.id %}" class="text-warning">
+<i class="bi bi-pencil-square"></i>
+</a>
+
+<a href="{% url 'note_delete' note.id %}"
+class="text-danger"
+onclick="return confirm('Delete this note?');">
+<i class="bi bi-trash"></i>
+</a>
+
+</div>
 
 </td>
 
 </tr>
 
+{% empty %}
+
+<tr>
+
+<td colspan="4" class="text-center text-muted">
+No notes found
+</td>
+
+</tr>
+
 {% endfor %}
+
+</tbody>
 
 </table>
 

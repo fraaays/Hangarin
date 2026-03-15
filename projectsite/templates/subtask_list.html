@@ -1,40 +1,155 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<h2>SubTasks</h2>
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<a href="{% url 'subtask_create' %}" class="btn btn-primary">Add SubTask</a>
+<div>
+<h2 class="fw-semibold mb-1">SubTask Manager</h2>
+<p class="text-muted mb-0">Manage subtasks efficiently.</p>
+</div>
 
-<table class="table mt-3">
+<div class="d-flex gap-2">
+<a href="{% url 'subtask_create' %}" class="btn btn-success shadow-sm">
+<i class="bi bi-plus-lg"></i> New SubTask
+</a>
 
+<a href="{% url 'subtask_list' %}" class="btn btn-outline-secondary">
+<i class="bi bi-arrow-clockwise"></i> Clear
+</a>
+</div>
+
+</div>
+
+
+<!-- SEARCH + FILTER -->
+<div class="card shadow-sm border-0 p-3 mb-4">
+
+<form method="GET" class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+
+<input
+type="text"
+name="search"
+class="form-control"
+style="max-width:500px;"
+placeholder="Search subtask..."
+value="{{ request.GET.search }}"
+>
+
+<select name="status" class="form-select" style="max-width:400px;">
+
+<option value="">Status</option>
+
+<option value="Pending"
+{% if request.GET.status == "Pending" %}selected{% endif %}>
+Pending
+</option>
+
+<option value="In Progress"
+{% if request.GET.status == "In Progress" %}selected{% endif %}>
+In Progress
+</option>
+
+<option value="Completed"
+{% if request.GET.status == "Completed" %}selected{% endif %}>
+Completed
+</option>
+
+</select>
+
+<button class="btn btn-primary px-4">
+Apply
+</button>
+
+</form>
+
+</div>
+
+
+<!-- TABLE -->
+<div class="table-responsive">
+
+<table class="table align-middle">
+
+<thead class="table-dark">
 <tr>
-<th>Task</th>
-<th>Title</th>
-<th>Status</th>
-<th>Actions</th>
+
+<th style="width:40%">Title</th>
+<th style="width:30%">Parent Task</th>
+<th class="text-center" style="width:15%">Status</th>
+<th class="text-center" style="width:15%">Actions</th>
+
 </tr>
+</thead>
+
+
+<tbody>
 
 {% for subtask in subtasks %}
 
 <tr>
 
-<td>{{ subtask.parent_task }}</td>
-<td>{{ subtask.title }}</td>
-<td>{{ subtask.status }}</td>
+<td class="fw-semibold">
+{{ subtask.title }}
+</td>
 
-<td>
+<td class="ps-3">
+{{ subtask.parent_task.title }}
+</td>
 
-<a href="{% url 'subtask_update' subtask.id %}" class="btn btn-warning btn-sm">Edit</a>
+<td class="text-center">
 
-<a href="{% url 'subtask_delete' subtask.id %}" class="btn btn-danger btn-sm">Delete</a>
+{% if subtask.status == "Pending" %}
+<span class="badge bg-secondary status-badge">Pending</span>
+
+{% elif subtask.status == "In Progress" %}
+<span class="badge bg-warning text-dark status-badge">In Progress</span>
+
+{% elif subtask.status == "Completed" %}
+<span class="badge bg-success status-badge">Completed</span>
+{% endif %}
+
+</td>
+
+<td class="text-center">
+
+<div class="d-flex justify-content-center gap-3">
+
+<a href="{% url 'subtask_view' subtask.id %}" class="text-primary">
+<i class="bi bi-eye"></i>
+</a>
+
+<a href="{% url 'subtask_update' subtask.id %}" class="text-warning">
+<i class="bi bi-pencil-square"></i>
+</a>
+
+<a href="{% url 'subtask_delete' subtask.id %}" 
+class="text-danger"
+onclick="return confirm('Delete this subtask?');">
+<i class="bi bi-trash"></i>
+</a>
+
+</div>
 
 </td>
 
 </tr>
 
+{% empty %}
+
+<tr>
+<td colspan="4" class="text-center text-muted py-4">
+No subtasks found
+</td>
+</tr>
+
 {% endfor %}
 
+</tbody>
+
 </table>
+
+</div>
 
 {% endblock %}

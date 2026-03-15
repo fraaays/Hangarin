@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:900px;">
+
+<div class="card shadow-sm p-4 mt-3">
+
+<h2 class="fw-semibold mb-4">Update Note</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<!-- TASK -->
+<div class="mb-3">
+<label class="form-label fw-semibold">Task</label>
+{{ form.task }}
+</div>
+
+<!-- CONTENT -->
+<div class="mb-4">
+<label class="form-label fw-semibold">Content</label>
+{{ form.content }}
+</div>
+
+<!-- BUTTONS -->
+<div class="d-flex gap-2">
+
+<button type="submit" class="btn btn-success px-4">
+<i class="bi bi-save"></i> Save
+</button>
+
+<a href="{% url 'note_list' %}" class="btn btn-outline-secondary px-4">
+<i class="bi bi-arrow-left"></i> Cancel
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}

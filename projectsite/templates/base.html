@@ -161,6 +161,42 @@ body{
     border-radius:12px;
 }
 
+.status-badge{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    width:130px;
+    height:34px;
+    font-weight:600;
+    border-radius:8px;
+}
+
+.priority-badge{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    width:100px;
+    height:32px;
+    font-weight:600;
+    border-radius:8px;
+}
+
+.deadline-cell{
+    white-space:nowrap;
+}
+
+.table td{
+    vertical-align: middle;
+}
+
+.action-icons i{
+    font-size:18px;
+}
+
+.action-icons a{
+    text-decoration:none;
+}
+
 </style>
 </head>
 
@@ -203,6 +239,14 @@ body{
 <a href="{% url 'priority_list' %}">
 <i class="bi bi-flag"></i> Priorities
 </a>
+
+<div class="sidebar-bottom">
+
+<a href="/admin/" target="_blank">
+<i class="bi bi-person-lock"></i> Admin Login
+</a>
+
+</div>
 
 </div>
 

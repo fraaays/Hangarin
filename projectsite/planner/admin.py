@@ -22,7 +22,6 @@ class SubTaskAdmin(admin.ModelAdmin):
 
     parent_task_name.short_description = "Parent Task"
 
-
 # Category Admin
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
