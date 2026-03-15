@@ -1,0 +1,20 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Confirm Login</title>
+</head>
+
+<body>
+
+<h3>Confirm Google Login</h3>
+
+<p>You are about to sign in using {{ provider.name }}</p>
+
+<form method="post">
+{% csrf_token %}
+<button type="submit">Continue</button>
+</form>
+
+</body>
+</html>
