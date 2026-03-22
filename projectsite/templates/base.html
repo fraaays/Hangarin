@@ -99,8 +99,7 @@ body{
 
 .main{
     margin-left:230px;
-    padding:35px;
-    transition:margin-left 0.3s ease;
+    padding:25px 35px 35px 35px;
 }
 
 /* expand when sidebar collapsed */
@@ -197,6 +196,137 @@ body{
     text-decoration:none;
 }
 
+.dropdown-card{
+    display:none;
+    position:absolute;
+    right:0;
+    top:55px;
+    width:230px;
+    background:white;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+    z-index:9999;
+    overflow:hidden;
+    animation:fadeIn 0.2s ease;
+}
+
+/* small arrow pointer */
+.dropdown-card::before{
+    content:"";
+    position:absolute;
+    top:-8px;
+    right:18px;
+    width:15px;
+    height:15px;
+    background:white;
+    transform:rotate(45deg);
+}
+
+/* header */
+.dropdown-header{
+    padding:15px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+
+.dropdown-header strong{
+    font-size:15px;
+}
+
+.dropdown-header small{
+    color:#777;
+}
+
+/* items */
+.dropdown-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 16px;
+    text-decoration:none;
+    color:#333;
+    font-size:15px;
+    transition:all 0.2s;
+}
+
+.dropdown-item:hover{
+    background:#f5f7fb;
+}
+
+.dropdown-item i{
+    font-size:18px;
+}
+
+/* logout style */
+.dropdown-item.logout{
+    color:#e74c3c;
+}
+
+.dropdown-item.logout:hover{
+    background:#fdecea;
+}
+
+/* animation */
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(-6px);}
+    to{opacity:1; transform:translateY(0);}
+}
+.profile-btn{
+    border:none;
+    background:none;
+    cursor:pointer;
+    padding:0;
+}
+
+/* container */
+.avatar-wrapper{
+    position:relative;
+    width:42px;
+    height:42px;
+}
+
+/* avatar */
+.avatar-wrapper img,
+.avatar-fallback{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #4f8df5;
+}
+
+/* fallback */
+.avatar-fallback{
+    background:#6c63ff;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+/* 🔥 THIS IS THE KEY FIX */
+.dropdown-badge{
+    position:absolute;
+    bottom: 2px;
+    right: 9px;
+    transform:translate(25%, 25%);
+    width:18px;
+    height:18px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* arrow */
+.dropdown-badge i{
+    font-size:10px;
+    color:#333;
+}
+
 </style>
 </head>
 
@@ -252,7 +382,58 @@ body{
 
 <!-- MAIN CONTENT -->
 
-<div class="main">
+<div class="main" style="position:relative;">
+<!-- PROFILE DROPDOWN (IMPROVED UI) -->
+<div style="position:absolute; top:20px; right:30px;">
+
+    <div class="profile-dropdown" style="position:relative;">
+
+        <!-- Profile Button -->
+        <button onclick="toggleDropdown()" 
+            style="border:none; background:none; cursor:pointer; display:flex; align-items:center; gap:5px;">
+            
+            {% if user.is_authenticated and user.socialaccount_set.all %}
+                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                     style="width:42px; height:42px; border-radius:50%; border:2px solid #4f8df5;">
+            {% else %}
+                <div style="width:42px; height:42px; border-radius:50%;
+                            background:#6c63ff; color:white; display:flex;
+                            align-items:center; justify-content:center;
+                            font-weight:bold;">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+            <div class="dropdown-badge">
+                <i class="bi bi-chevron-down"></i>
+            </div>
+
+        </button>
+
+        <!-- Dropdown -->
+        <div id="dropdownMenu" class="dropdown-card">
+
+            <div class="dropdown-header">
+                {% if user.is_authenticated %}
+                    <strong>{{ user.username }}</strong><br>
+                    <small>{{ user.email }}</small>
+                {% endif %}
+            </div>
+
+            <hr>
+
+            <a href="#" class="dropdown-item">
+                <i class="bi bi-person"></i> Profile
+            </a>
+
+            <a href="/accounts/logout/" class="dropdown-item logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% block content %}
 {% endblock %}
@@ -272,6 +453,30 @@ function toggleSidebar(){
     sidebar.classList.toggle("collapsed");
     main.classList.toggle("full");
 
+}
+
+// DROPDOWN FUNCTION
+function toggleDropdown() {
+    const menu = document.getElementById("dropdownMenu");
+    const arrow = document.querySelector(".bi-chevron-down");
+
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
+        if (arrow) arrow.style.transform = "rotate(0deg)";
+    } else {
+        menu.style.display = "block";
+        if (arrow) arrow.style.transform = "rotate(180deg)";
+    }
+}
+
+// CLOSE DROPDOWN WHEN CLICK OUTSIDE
+window.onclick = function(event) {
+    if (!event.target.closest('.profile-dropdown')) {
+        const menu = document.getElementById("dropdownMenu");
+        if (menu) {
+            menu.style.display = "none";
+        }
+    }
 }
 
 </script>
