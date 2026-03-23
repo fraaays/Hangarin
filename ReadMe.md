@@ -2,9 +2,6 @@
 
 Hangarin is a web-based To-Do and planner application built using Django. It helps users organize tasks, manage notes, and categorize activities efficiently.
 
-## Link for Demonstration
-https://fraaays.pythonanywhere.com
-
 ## Features
 
 * Task and note management
@@ -66,6 +63,10 @@ python manage.py runserver
 * `planner/` - main app (tasks, notes, categories)
 * `templates/` - HTML files
 * `manage.py` - Django command tool
+
+
+## Link for Demonstration
+https://fraaays.pythonanywhere.com
 
 ## Author
 
