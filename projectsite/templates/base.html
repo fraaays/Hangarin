@@ -309,7 +309,7 @@ body{
 .dropdown-badge{
     position:absolute;
     bottom: 2px;
-    right: 9px;
+    right: 4px;
     transform:translate(25%, 25%);
     width:18px;
     height:18px;
@@ -384,27 +384,30 @@ body{
 
 <div class="main" style="position:relative;">
 <!-- PROFILE DROPDOWN (IMPROVED UI) -->
+{% if request.path == '/' %}
 <div style="position:absolute; top:20px; right:30px;">
 
     <div class="profile-dropdown" style="position:relative;">
 
         <!-- Profile Button -->
         <button onclick="toggleDropdown()" 
-            style="border:none; background:none; cursor:pointer; display:flex; align-items:center; gap:5px;">
+            style="border:none; background:none; cursor:pointer;">
             
-            {% if user.is_authenticated and user.socialaccount_set.all %}
-                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
-                     style="width:42px; height:42px; border-radius:50%; border:2px solid #4f8df5;">
-            {% else %}
-                <div style="width:42px; height:42px; border-radius:50%;
-                            background:#6c63ff; color:white; display:flex;
-                            align-items:center; justify-content:center;
-                            font-weight:bold;">
-                    {{ user.username|first|upper }}
+            <div class="avatar-wrapper">
+
+                {% if user.is_authenticated and user.socialaccount_set.all %}
+                    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}">
+                {% else %}
+                    <div class="avatar-fallback">
+                        {{ user.username|first|upper }}
+                    </div>
+                {% endif %}
+
+                <!-- Arrow inside avatar -->
+                <div class="dropdown-badge">
+                    <i class="bi bi-chevron-down"></i>
                 </div>
-            {% endif %}
-            <div class="dropdown-badge">
-                <i class="bi bi-chevron-down"></i>
+
             </div>
 
         </button>
@@ -434,6 +437,7 @@ body{
     </div>
 
 </div>
+{% endif %}
 
 {% block content %}
 {% endblock %}

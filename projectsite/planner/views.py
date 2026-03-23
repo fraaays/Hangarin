@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import now
 from .models import Task, SubTask, Note, Category, Priority
 from .forms import TaskForm, SubTaskForm, NoteForm, CategoryForm, PriorityForm
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def dashboard(request):
 
     total_tasks = Task.objects.count()
