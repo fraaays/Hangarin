@@ -136,6 +136,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / "static"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'hangarin/static'),
+]
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
@@ -164,21 +167,22 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': '/static/img/icon1.png',
+        'src': '/static/img/icon-192.png',
         'sizes': '192x192'
     },
     {
-        'src': '/static/img/icon2.png',
+        'src': '/static/img/icon-512.png',
         'sizes': '512x512'
     }
 ]
+
 PWA_APP_ICONS_APPLE = [
     {
-        'src': '/static/img/icon1.png',
+        'src': '/static/img/icon-192.png',
         'sizes': '192x192'
     },
     {
-        'src': '/static/img/icon2.png',
+        'src': '/static/img/icon-512.png',
         'sizes': '512x512'
     }
 ]
