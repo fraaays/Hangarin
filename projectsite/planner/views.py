@@ -3,6 +3,11 @@ from django.utils.timezone import now
 from .models import Task, SubTask, Note, Category, Priority
 from .forms import TaskForm, SubTaskForm, NoteForm, CategoryForm, PriorityForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
+def custom_logout(request):
+    logout(request)
+    return redirect('/accounts/login/')
 
 @login_required
 def dashboard(request):

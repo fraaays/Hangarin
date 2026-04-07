@@ -2,80 +2,75 @@
 
 {% block content %}
 
-<div class="container" style="max-width:900px;">
-
-<div class="mb-4">
-
-<h2 class="fw-semibold mb-0">Priorities</h2>
-<p class="text-muted">Manage task priorities.</p>
-
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+<div>
+<h2 class="fw-semibold mb-1">Priorities</h2>
+<p class="text-muted mb-0">Manage task priorities.</p>
 </div>
-
+<a href="{% url 'priority_create' %}" class="btn btn-success shadow-sm">
+<i class="bi bi-plus-lg"></i> New Priority
+</a>
+</div>
 
 <!-- SEARCH -->
-
-<div class="card shadow-sm p-3 mb-4">
-
-<form method="GET"
-class="d-flex justify-content-center align-items-center gap-3">
-
-<input type="text"
-name="search"
-class="form-control"
-style="max-width:400px;"
-placeholder="Search priority..."
-value="{{ request.GET.search }}">
-
-<button class="btn btn-primary px-4">
-Apply
+<div class="card shadow-sm mb-4">
+<div class="card-body">
+<form method="GET">
+<div class="row g-2">
+<div class="col-10 col-md-10">
+<input type="text" name="search" class="form-control"
+    placeholder="Search priority..." value="{{ request.GET.search }}">
+</div>
+<div class="col-2 col-md-2">
+<button class="btn btn-primary w-100">
+<i class="bi bi-search d-md-none"></i>
+<span class="d-none d-md-inline">Search</span>
 </button>
-
+</div>
+</div>
 </form>
-
+</div>
 </div>
 
-
-
 <!-- TABLE -->
-
 <div class="card shadow-sm">
-
-<table class="table align-middle mb-0">
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover align-middle mb-0">
 
 <thead class="table-dark">
-
 <tr>
 <th>Priority Name</th>
+<th class="text-center" style="width:130px;">Actions</th>
 </tr>
-
 </thead>
 
 <tbody>
-
 {% for priority in priorities %}
-
 <tr>
-<td class="fw-semibold">
-{{ priority.name }}
+<td class="fw-semibold">{{ priority.name }}</td>
+<td class="text-center">
+<div class="d-flex justify-content-center gap-3">
+<a href="{% url 'priority_update' priority.id %}" class="text-warning" title="Edit">
+<i class="bi bi-pencil-square fs-5"></i>
+</a>
+<a href="{% url 'priority_delete' priority.id %}" class="text-danger" title="Delete"
+   onclick="return confirm('Delete priority &quot;{{ priority.name }}&quot;?');">
+<i class="bi bi-trash fs-5"></i>
+</a>
+</div>
 </td>
 </tr>
-
 {% empty %}
-
 <tr>
-<td class="text-center text-muted">
-No priorities found
-</td>
+<td colspan="2" class="text-center text-muted py-4">No priorities found</td>
 </tr>
-
 {% endfor %}
-
 </tbody>
 
 </table>
-
 </div>
-
+</div>
 </div>
 
 {% endblock %}
