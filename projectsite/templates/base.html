@@ -385,8 +385,11 @@ body{
 
 </nav>
 
-<!-- OVERLAY (mobile backdrop) -->
+<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- DROPDOWN OVERLAY -->
+<div class="sidebar-overlay" id="dropdownOverlay" onclick="closeDropdown()" style="z-index:9990;"></div>
 
 <!-- SIDEBAR (collapsed by default) -->
 
@@ -478,26 +481,26 @@ window.addEventListener("resize", () => {
 // DROPDOWN
 function toggleDropdown() {
     const menu = document.getElementById("dropdownMenu");
+    const overlay = document.getElementById("dropdownOverlay");
     const arrow = document.querySelector(".bi-chevron-down");
 
     if (menu.style.display === "block") {
-        menu.style.display = "none";
-        if (arrow) arrow.style.transform = "rotate(0deg)";
+        closeDropdown();
     } else {
         menu.style.display = "block";
+        overlay.classList.add("show");
         if (arrow) arrow.style.transform = "rotate(180deg)";
     }
 }
 
-// Close dropdown on outside click
-window.addEventListener("click", function(event) {
-    if (!event.target.closest('.profile-dropdown')) {
-        const menu = document.getElementById("dropdownMenu");
-        const arrow = document.querySelector(".bi-chevron-down");
-        if (menu) menu.style.display = "none";
-        if (arrow) arrow.style.transform = "rotate(0deg)";
-    }
-});
+function closeDropdown() {
+    const menu = document.getElementById("dropdownMenu");
+    const overlay = document.getElementById("dropdownOverlay");
+    const arrow = document.querySelector(".bi-chevron-down");
+    if (menu) menu.style.display = "none";
+    if (overlay) overlay.classList.remove("show");
+    if (arrow) arrow.style.transform = "rotate(0deg)";
+}
 
 </script>
 
